@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateOffer } from './dto/offers.dto';
 import { AppService } from './app.service';
+import { CreateAnswer } from './dto/answer.dto';
 
 @Controller()
 export class AppController {
@@ -19,5 +20,15 @@ export class AppController {
   @Get('offer')
   getOffer() {
     return this.appService.getOffer();
+  }
+
+  @Post('answer')
+  saveAnswer(@Body() payload: CreateAnswer) {
+    return this.appService.saveAnswer(payload);
+  }
+
+  @Get('answer')
+  getAnswer() {
+    return this.appService.getAnswer();
   }
 }
