@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateOfferDto } from './dto/offers.dto';
 import { AppService } from './app.service';
 import { CreateAnswer } from './dto/answer.dto';
@@ -17,9 +17,9 @@ export class AppController {
     return this.appService.saveOffer(payload);
   }
 
-  @Get('offer')
-  getOffer() {
-    return this.appService.getOffer();
+  @Get('offer/:offerName')
+  getOffer(@Param('offerName') offerName: string) {
+    return this.appService.getOffer(offerName);
   }
 
   @Post('answer')

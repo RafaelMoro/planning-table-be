@@ -10,15 +10,21 @@ import { Offer } from './entities/offers.entity';
 @Injectable()
 export class AppService {
   constructor(@InjectModel(Offer.name) private offerModel: Model<Offer>) {}
-  private offer: string;
   private answer: string;
 
   checkBeConnection(): string {
     return 'Planning table backend answering';
   }
 
+  hasWhiteSpace(offerName: string) {
+    return offerName.indexOf(' ') >= 0;
+  }
+
   async saveOffer(payload: CreateOfferDto) {
     try {
+      if (this.hasWhiteSpace(payload.offerName))
+        throw new BadRequestException('Offer name cannot have white spaces');
+
       const newModel = new this.offerModel(payload);
       const model = await newModel.save();
       const response: GeneralResponse = {
@@ -32,26 +38,23 @@ export class AppService {
     } catch (err) {
       throw new BadRequestException(err.message);
     }
-    // const { offer: offerSent } = payload;
-    // this.offer = offerSent;
-    // const response: GeneralResponse = {
-    //   ...generalResponse,
-    //   message: 'Offer set',
-    // };
-    // return response;
   }
 
-  getOffer() {
-    if (!this.offer)
-      throw new BadRequestException('Offer not set. Set it first');
+  async getOffer(offerName: string) {
+    try {
+      const offerFound = await this.offerModel.find({ offerName }).exec();
+      if (!offerFound) throw new BadRequestException('Offer not found');
 
-    const response: GeneralResponse = {
-      ...generalResponse,
-      data: {
-        offer: this.offer,
-      },
-    };
-    return response;
+      const response: GeneralResponse = {
+        ...generalResponse,
+        data: {
+          offer: offerFound,
+        },
+      };
+      return response;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 
   saveAnswer(payload: CreateAnswer) {

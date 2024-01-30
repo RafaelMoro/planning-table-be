@@ -5,6 +5,9 @@ import { Document } from 'mongoose';
 export class Offer extends Document {
   @Prop({ required: true })
   offer: string;
+
+  @Prop({ required: true })
+  offerName: string;
 }
 
 export const OfferSchema = SchemaFactory.createForClass(Offer);
