@@ -2,8 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CreateOfferDto, UpdateOfferDto } from './dto/offers.dto';
 import { generalResponse } from './constants';
-import { CompleteOffer, GeneralResponse } from './interface';
-import { CreateAnswerDto } from './dto/answer.dto';
+import { CompleteAnswer, CompleteOffer, GeneralResponse } from './interface';
+import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Offer } from './entities/offers.entity';
 import { Answer } from './entities/answers.entity';
@@ -100,6 +100,33 @@ export class AppService {
         message: 'Answer saved',
         data: {
           answer: model,
+        },
+      };
+      return response;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
+  }
+
+  async updateAnswer(changes: UpdateAnswerDto) {
+    try {
+      const { answerName } = changes;
+      const answersFound: CompleteAnswer[] = await this.answerModel
+        .find({ answerName })
+        .exec();
+      if (answersFound.length === 0)
+        throw new BadRequestException('Answer not found');
+
+      const [answerFound] = answersFound;
+      const { _id: answerId } = answerFound;
+      const updatedAnswer = await this.answerModel
+        .findByIdAndUpdate(answerId, { $set: changes }, { new: true })
+        .exec();
+      const response: GeneralResponse = {
+        ...generalResponse,
+        message: 'Answer updated',
+        data: {
+          answer: updatedAnswer,
         },
       };
       return response;

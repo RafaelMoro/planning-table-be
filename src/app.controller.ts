@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CreateOfferDto, UpdateOfferDto } from './dto/offers.dto';
 import { AppService } from './app.service';
-import { CreateAnswerDto } from './dto/answer.dto';
+import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 
 @Controller()
 export class AppController {
@@ -30,6 +30,11 @@ export class AppController {
   @Post('answer')
   saveAnswer(@Body() payload: CreateAnswerDto) {
     return this.appService.saveAnswer(payload);
+  }
+
+  @Put('answer')
+  updateAnswer(@Body() payload: UpdateAnswerDto) {
+    return this.appService.updateAnswer(payload);
   }
 
   @Get('answer/:answerName')

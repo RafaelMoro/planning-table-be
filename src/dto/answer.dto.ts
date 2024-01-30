@@ -11,4 +11,8 @@ export class CreateAnswerDto {
   answerName: string;
 }
 
-export class UpdateAccountDto extends PartialType(CreateAnswerDto) {}
+export class UpdateAnswerDto extends PartialType(CreateAnswerDto) {
+  @IsString()
+  @IsNotEmpty()
+  answerName: string;
+}
