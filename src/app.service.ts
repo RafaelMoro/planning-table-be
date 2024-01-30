@@ -32,7 +32,7 @@ export class AppService {
       const model = await newModel.save();
       const response: GeneralResponse = {
         ...generalResponse,
-        message: 'Offer set',
+        message: 'Offer saved',
         data: {
           offer: model,
         },
@@ -70,7 +70,7 @@ export class AppService {
       const model = await newModel.save();
       const response: GeneralResponse = {
         ...generalResponse,
-        message: 'Answer se',
+        message: 'Answer saved',
         data: {
           answer: model,
         },

@@ -6,7 +6,7 @@ export class Offer extends Document {
   @Prop({ required: true })
   offer: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   offerName: string;
 }
 

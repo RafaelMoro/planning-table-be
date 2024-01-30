@@ -6,7 +6,7 @@ export class Answer extends Document {
   @Prop({ required: true })
   answer: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   answerName: string;
 }
 
