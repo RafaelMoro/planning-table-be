@@ -1,11 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateOffer } from './dto/offers.dto';
+import { Model } from 'mongoose';
+import { CreateOfferDto } from './dto/offers.dto';
 import { generalResponse } from './constants';
 import { GeneralResponse } from './interface';
 import { CreateAnswer } from './dto/answer.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Offer } from './entities/offers.entity';
 
 @Injectable()
 export class AppService {
+  constructor(@InjectModel(Offer.name) private offerModel: Model<Offer>) {}
   private offer: string;
   private answer: string;
 
@@ -13,14 +17,28 @@ export class AppService {
     return 'Planning table backend answering';
   }
 
-  saveOffer(payload: CreateOffer) {
-    const { offer: offerSent } = payload;
-    this.offer = offerSent;
-    const response: GeneralResponse = {
-      ...generalResponse,
-      message: 'Offer set',
-    };
-    return response;
+  async saveOffer(payload: CreateOfferDto) {
+    try {
+      const newModel = new this.offerModel(payload);
+      const model = await newModel.save();
+      const response: GeneralResponse = {
+        ...generalResponse,
+        message: 'Offer set',
+        data: {
+          offer: model,
+        },
+      };
+      return response;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
+    // const { offer: offerSent } = payload;
+    // this.offer = offerSent;
+    // const response: GeneralResponse = {
+    //   ...generalResponse,
+    //   message: 'Offer set',
+    // };
+    // return response;
   }
 
   getOffer() {
