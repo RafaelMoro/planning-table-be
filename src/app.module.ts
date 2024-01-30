@@ -9,6 +9,7 @@ import { DatabasesModule } from './databases/databases.module';
 import config from './config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Offer, OfferSchema } from './entities/offers.entity';
+import { Answer, AnswerSchema } from './entities/answers.entity';
 
 @Module({
   imports: [
@@ -29,6 +30,10 @@ import { Offer, OfferSchema } from './entities/offers.entity';
       {
         name: Offer.name,
         schema: OfferSchema,
+      },
+      {
+        name: Answer.name,
+        schema: AnswerSchema,
       },
     ]),
   ],

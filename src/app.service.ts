@@ -3,14 +3,17 @@ import { Model } from 'mongoose';
 import { CreateOfferDto } from './dto/offers.dto';
 import { generalResponse } from './constants';
 import { GeneralResponse } from './interface';
-import { CreateAnswer } from './dto/answer.dto';
+import { CreateAnswerDto } from './dto/answer.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Offer } from './entities/offers.entity';
+import { Answer } from './entities/answers.entity';
 
 @Injectable()
 export class AppService {
-  constructor(@InjectModel(Offer.name) private offerModel: Model<Offer>) {}
-  private answer: string;
+  constructor(
+    @InjectModel(Offer.name) private offerModel: Model<Offer>,
+    @InjectModel(Answer.name) private answerModel: Model<Answer>,
+  ) {}
 
   checkBeConnection(): string {
     return 'Planning table backend answering';
@@ -43,7 +46,8 @@ export class AppService {
   async getOffer(offerName: string) {
     try {
       const offerFound = await this.offerModel.find({ offerName }).exec();
-      if (!offerFound) throw new BadRequestException('Offer not found');
+      if (offerFound.length === 0)
+        throw new BadRequestException('Offer not found');
 
       const response: GeneralResponse = {
         ...generalResponse,
@@ -57,26 +61,42 @@ export class AppService {
     }
   }
 
-  saveAnswer(payload: CreateAnswer) {
-    const { answer: answerSent } = payload;
-    this.answer = answerSent;
-    const response: GeneralResponse = {
-      ...generalResponse,
-      message: 'Answer set',
-    };
-    return response;
+  async saveAnswer(payload: CreateAnswerDto) {
+    try {
+      if (this.hasWhiteSpace(payload.answerName))
+        throw new BadRequestException('Offer name cannot have white spaces');
+
+      const newModel = new this.answerModel(payload);
+      const model = await newModel.save();
+      const response: GeneralResponse = {
+        ...generalResponse,
+        message: 'Answer se',
+        data: {
+          answer: model,
+        },
+      };
+      return response;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 
-  getAnswer() {
-    if (!this.answer)
-      throw new BadRequestException('Answer not set. Set it first');
+  async getAnswer(answerName: string) {
+    try {
+      const answerFound = await this.answerModel.find({ answerName }).exec();
+      console.log('answer found', answerFound);
+      if (answerFound.length === 0)
+        throw new BadRequestException('Answer not found');
 
-    const response: GeneralResponse = {
-      ...generalResponse,
-      data: {
-        answer: this.answer,
-      },
-    };
-    return response;
+      const response: GeneralResponse = {
+        ...generalResponse,
+        data: {
+          offer: answerFound,
+        },
+      };
+      return response;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 }
