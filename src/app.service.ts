@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { CreateOfferDto } from './dto/offers.dto';
+import { CreateOfferDto, UpdateOfferDto } from './dto/offers.dto';
 import { generalResponse } from './constants';
-import { GeneralResponse } from './interface';
+import { CompleteOffer, GeneralResponse } from './interface';
 import { CreateAnswerDto } from './dto/answer.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Offer } from './entities/offers.entity';
@@ -53,6 +53,33 @@ export class AppService {
         ...generalResponse,
         data: {
           offer: offerFound,
+        },
+      };
+      return response;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
+  }
+
+  async updateOffer(changes: UpdateOfferDto) {
+    try {
+      const { offerName } = changes;
+      const offersFound: CompleteOffer[] = await this.offerModel
+        .find({ offerName })
+        .exec();
+      if (offersFound.length === 0)
+        throw new BadRequestException('Offer not found');
+
+      const [offerFound] = offersFound;
+      const { _id: offerId } = offerFound;
+      const updatedOffer = await this.offerModel
+        .findByIdAndUpdate(offerId, { $set: changes }, { new: true })
+        .exec();
+      const response: GeneralResponse = {
+        ...generalResponse,
+        message: 'Offer updated',
+        data: {
+          offer: updatedOffer,
         },
       };
       return response;

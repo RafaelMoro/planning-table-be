@@ -11,4 +11,8 @@ export class CreateOfferDto {
   offerName: string;
 }
 
-export class UpdateAccountDto extends PartialType(CreateOfferDto) {}
+export class UpdateOfferDto extends PartialType(CreateOfferDto) {
+  @IsString()
+  @IsNotEmpty()
+  offerName: string;
+}
