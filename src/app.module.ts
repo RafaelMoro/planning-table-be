@@ -10,6 +10,7 @@ import config from './config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Offer, OfferSchema } from './entities/offers.entity';
 import { Answer, AnswerSchema } from './entities/answers.entity';
+import { RecordsModule } from './records/records.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { Answer, AnswerSchema } from './entities/answers.entity';
         schema: AnswerSchema,
       },
     ]),
+    RecordsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
