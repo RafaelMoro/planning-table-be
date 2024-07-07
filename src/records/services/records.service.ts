@@ -19,4 +19,13 @@ export class AccountRecordsService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async getRecords() {
+    try {
+      const records = await this.recordModel.find().exec();
+      return records;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }

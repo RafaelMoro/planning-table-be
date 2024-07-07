@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AccountRecordsService } from '../services/records.service';
 import { CreateAccountRecordDto } from '../records.dto';
 
@@ -9,5 +9,10 @@ export class RecordsController {
   @Post()
   createRecord(@Body() payload: CreateAccountRecordDto) {
     return this.recordsService.createRecord(payload);
+  }
+
+  @Get()
+  getRecords() {
+    return this.recordsService.getRecords();
   }
 }
