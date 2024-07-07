@@ -17,4 +17,13 @@ export class BudgetsService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async getBudgets() {
+    try {
+      const budgets = await this.budgetModel.find().exec();
+      return budgets;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }

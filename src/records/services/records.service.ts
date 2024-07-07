@@ -8,7 +8,7 @@ import { CreateAccountRecordDto } from '../records.dto';
 export class AccountRecordsService {
   constructor(
     @InjectModel(AccountRecord.name) private recordModel: Model<AccountRecord>,
-  ) { }
+  ) {}
 
   async createRecord(payload: CreateAccountRecordDto) {
     try {
