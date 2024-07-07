@@ -22,7 +22,7 @@ export class AccountRecordsService {
 
   async getRecords() {
     try {
-      const records = await this.recordModel.find().exec();
+      const records = await this.recordModel.find().populate('budget').exec();
       return records;
     } catch (error) {
       throw new BadRequestException(error.message);
