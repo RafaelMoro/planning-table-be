@@ -26,4 +26,13 @@ export class BudgetsService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async deleteBudget(id: string) {
+    try {
+      const budget = await this.budgetModel.findByIdAndDelete(id).exec();
+      return budget;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }

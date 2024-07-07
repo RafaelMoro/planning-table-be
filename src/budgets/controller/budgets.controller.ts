@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { BudgetsService } from '../services/budgets.service';
 import { CreateBudgetDto } from '../budgets.dto';
 
@@ -14,5 +14,10 @@ export class BudgetsController {
   @Get()
   getBudgets() {
     return this.budgetService.getBudgets();
+  }
+
+  @Delete()
+  deleteBudget(@Body() payload: { budgetId: string }) {
+    return this.budgetService.deleteBudget(payload.budgetId);
   }
 }
