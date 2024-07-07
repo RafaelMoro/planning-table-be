@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { AccountRecordsService } from '../services/records.service';
 import { CreateAccountRecordDto } from '../records.dto';
 
@@ -14,5 +14,10 @@ export class RecordsController {
   @Get()
   getRecords() {
     return this.recordsService.getRecords();
+  }
+
+  @Delete()
+  deleteRecord(@Body() payload: { recordId: string }) {
+    return this.recordsService.deleteRecord(payload.recordId);
   }
 }

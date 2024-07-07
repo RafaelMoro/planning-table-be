@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Budgets } from 'src/budgets/budgets.entity';
 
 @Schema()
 export class AccountRecord extends Document {
@@ -12,8 +13,8 @@ export class AccountRecord extends Document {
   @Prop({ required: true })
   amount: number;
 
-  @Prop({ required: true })
-  budget: string;
+  @Prop({ required: true, type: Types.ObjectId, ref: Budgets.name })
+  budget: Budgets | Types.ObjectId;
 }
 
 export const AccountRecordSchema = SchemaFactory.createForClass(AccountRecord);

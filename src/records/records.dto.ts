@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateAccountRecordDto {
   @IsString()
@@ -13,7 +13,7 @@ export class CreateAccountRecordDto {
   @IsNotEmpty()
   readonly amount: number;
 
-  @IsString()
+  @IsMongoId()
   @IsNotEmpty()
   readonly budget: string;
 }

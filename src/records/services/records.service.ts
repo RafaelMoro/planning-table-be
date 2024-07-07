@@ -28,4 +28,13 @@ export class AccountRecordsService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async deleteRecord(id: string) {
+    try {
+      const record = await this.recordModel.findByIdAndDelete(id).exec();
+      return record;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }
