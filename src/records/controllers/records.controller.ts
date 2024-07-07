@@ -4,7 +4,7 @@ import { CreateAccountRecordDto } from '../records.dto';
 
 @Controller('records')
 export class RecordsController {
-  constructor(private recordsService: AccountRecordsService) { }
+  constructor(private recordsService: AccountRecordsService) {}
 
   @Post()
   createRecord(@Body() payload: CreateAccountRecordDto) {

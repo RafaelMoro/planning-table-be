@@ -11,6 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Offer, OfferSchema } from './entities/offers.entity';
 import { Answer, AnswerSchema } from './entities/answers.entity';
 import { RecordsModule } from './records/records.module';
+import { BudgetsModule } from './budgets/budgets.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { RecordsModule } from './records/records.module';
       },
     ]),
     RecordsModule,
+    BudgetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
