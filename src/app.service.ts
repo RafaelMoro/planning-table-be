@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CreateOfferDto, UpdateOfferDto } from './dto/offers.dto';
 import { generalResponse } from './constants';
-import { CompleteAnswer, CompleteOffer, GeneralResponse } from './interface';
+import { GeneralResponse } from './interface';
 import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Offer } from './entities/offers.entity';
@@ -15,8 +15,13 @@ export class AppService {
     @InjectModel(Answer.name) private answerModel: Model<Answer>,
   ) {}
 
-  checkBeConnection(): string {
-    return 'Planning table backend answering';
+  checkBeConnection() {
+    const response: GeneralResponse = {
+      ...generalResponse,
+      message: 'Planning table backend answering',
+      data: null,
+    };
+    return response;
   }
 
   hasWhiteSpace(offerName: string) {
@@ -64,9 +69,7 @@ export class AppService {
   async updateOffer(changes: UpdateOfferDto) {
     try {
       const { offerName } = changes;
-      const offersFound: CompleteOffer[] = await this.offerModel
-        .find({ offerName })
-        .exec();
+      const offersFound = await this.offerModel.find({ offerName }).exec();
       if (offersFound.length === 0)
         throw new BadRequestException('Offer not found');
 
@@ -111,9 +114,7 @@ export class AppService {
   async updateAnswer(changes: UpdateAnswerDto) {
     try {
       const { answerName } = changes;
-      const answersFound: CompleteAnswer[] = await this.answerModel
-        .find({ answerName })
-        .exec();
+      const answersFound = await this.answerModel.find({ answerName }).exec();
       if (answersFound.length === 0)
         throw new BadRequestException('Answer not found');
 
