@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CreateOfferDto, UpdateOfferDto } from './dto/offers.dto';
 import { AppService } from './app.service';
 import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
@@ -8,7 +16,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  checkConnection(): string {
+  checkConnection() {
     return this.appService.checkBeConnection();
   }
 
@@ -20,6 +28,11 @@ export class AppController {
   @Put('offer')
   updateOffer(@Body() payload: UpdateOfferDto) {
     return this.appService.updateOffer(payload);
+  }
+
+  @Delete('offer/:offerName')
+  deleteOffer(@Param('offerName') offerName: string) {
+    return this.appService.deleteOffer(offerName);
   }
 
   @Get('offer/:offerName')
@@ -35,6 +48,11 @@ export class AppController {
   @Put('answer')
   updateAnswer(@Body() payload: UpdateAnswerDto) {
     return this.appService.updateAnswer(payload);
+  }
+
+  @Delete('answer/:answerName')
+  deleteAnswer(@Param('answerName') answerName: string) {
+    return this.appService.deleteAnswer(answerName);
   }
 
   @Get('answer/:answerName')

@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CreateOfferDto, UpdateOfferDto } from './dto/offers.dto';
 import { generalResponse } from './constants';
-import { CompleteAnswer, CompleteOffer, GeneralResponse } from './interface';
+import { GeneralResponse } from './interface';
 import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Offer } from './entities/offers.entity';
@@ -15,8 +15,13 @@ export class AppService {
     @InjectModel(Answer.name) private answerModel: Model<Answer>,
   ) {}
 
-  checkBeConnection(): string {
-    return 'Planning table backend answering';
+  checkBeConnection() {
+    const response: GeneralResponse = {
+      ...generalResponse,
+      message: 'Planning table backend answering',
+      data: null,
+    };
+    return response;
   }
 
   hasWhiteSpace(offerName: string) {
@@ -43,11 +48,49 @@ export class AppService {
     }
   }
 
+  async deleteOffer(offerName: string) {
+    try {
+      const offerDeleted = await this.offerModel.findOneAndDelete({
+        offerName,
+      });
+      return {
+        ...generalResponse,
+        message: 'Offer deleted',
+        data: {
+          offer: offerDeleted,
+        },
+      };
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
+  }
+
+  async deleteAnswer(answerName: string) {
+    try {
+      const answerDeleted = await this.answerModel.findOneAndDelete({
+        answerName,
+      });
+      return {
+        ...generalResponse,
+        message: 'Answer deleted',
+        data: {
+          answer: answerDeleted,
+        },
+      };
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
+  }
   async getOffer(offerName: string) {
     try {
       const offerFound = await this.offerModel.find({ offerName }).exec();
-      if (offerFound.length === 0)
-        throw new BadRequestException('Offer not found');
+      if (offerFound.length === 0) {
+        return {
+          ...generalResponse,
+          data: null,
+          message: 'Offer not found',
+        };
+      }
 
       const response: GeneralResponse = {
         ...generalResponse,
@@ -64,9 +107,7 @@ export class AppService {
   async updateOffer(changes: UpdateOfferDto) {
     try {
       const { offerName } = changes;
-      const offersFound: CompleteOffer[] = await this.offerModel
-        .find({ offerName })
-        .exec();
+      const offersFound = await this.offerModel.find({ offerName }).exec();
       if (offersFound.length === 0)
         throw new BadRequestException('Offer not found');
 
@@ -111,9 +152,7 @@ export class AppService {
   async updateAnswer(changes: UpdateAnswerDto) {
     try {
       const { answerName } = changes;
-      const answersFound: CompleteAnswer[] = await this.answerModel
-        .find({ answerName })
-        .exec();
+      const answersFound = await this.answerModel.find({ answerName }).exec();
       if (answersFound.length === 0)
         throw new BadRequestException('Answer not found');
 
@@ -139,8 +178,13 @@ export class AppService {
     try {
       const answerFound = await this.answerModel.find({ answerName }).exec();
       console.log('answer found', answerFound);
-      if (answerFound.length === 0)
-        throw new BadRequestException('Answer not found');
+      if (answerFound.length === 0) {
+        return {
+          ...generalResponse,
+          data: null,
+          message: 'Answer not found',
+        };
+      }
 
       const response: GeneralResponse = {
         ...generalResponse,
