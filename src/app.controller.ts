@@ -50,6 +50,11 @@ export class AppController {
     return this.appService.updateAnswer(payload);
   }
 
+  @Delete('answer/:answerName')
+  deleteAnswer(@Param('answerName') answerName: string) {
+    return this.appService.deleteAnswer(answerName);
+  }
+
   @Get('answer/:answerName')
   getAnswer(@Param('answerName') answerName: string) {
     return this.appService.getAnswer(answerName);

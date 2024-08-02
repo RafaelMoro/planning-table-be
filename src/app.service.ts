@@ -64,6 +64,23 @@ export class AppService {
       throw new BadRequestException(err.message);
     }
   }
+
+  async deleteAnswer(answerName: string) {
+    try {
+      const answerDeleted = await this.answerModel.findOneAndDelete({
+        answerName,
+      });
+      return {
+        ...generalResponse,
+        message: 'Answer deleted',
+        data: {
+          answer: answerDeleted,
+        },
+      };
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
+  }
   async getOffer(offerName: string) {
     try {
       const offerFound = await this.offerModel.find({ offerName }).exec();
