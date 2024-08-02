@@ -84,8 +84,13 @@ export class AppService {
   async getOffer(offerName: string) {
     try {
       const offerFound = await this.offerModel.find({ offerName }).exec();
-      if (offerFound.length === 0)
-        throw new BadRequestException('Offer not found');
+      if (offerFound.length === 0) {
+        return {
+          ...generalResponse,
+          data: null,
+          message: 'Offer not found',
+        };
+      }
 
       const response: GeneralResponse = {
         ...generalResponse,
@@ -173,8 +178,13 @@ export class AppService {
     try {
       const answerFound = await this.answerModel.find({ answerName }).exec();
       console.log('answer found', answerFound);
-      if (answerFound.length === 0)
-        throw new BadRequestException('Answer not found');
+      if (answerFound.length === 0) {
+        return {
+          ...generalResponse,
+          data: null,
+          message: 'Answer not found',
+        };
+      }
 
       const response: GeneralResponse = {
         ...generalResponse,
