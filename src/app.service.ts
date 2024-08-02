@@ -48,6 +48,22 @@ export class AppService {
     }
   }
 
+  async deleteOffer(offerName: string) {
+    try {
+      const offerDeleted = await this.offerModel.findOneAndDelete({
+        offerName,
+      });
+      return {
+        ...generalResponse,
+        message: 'Offer deleted',
+        data: {
+          offer: offerDeleted,
+        },
+      };
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
+  }
   async getOffer(offerName: string) {
     try {
       const offerFound = await this.offerModel.find({ offerName }).exec();

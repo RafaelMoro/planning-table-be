@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CreateOfferDto, UpdateOfferDto } from './dto/offers.dto';
 import { AppService } from './app.service';
 import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
@@ -20,6 +28,11 @@ export class AppController {
   @Put('offer')
   updateOffer(@Body() payload: UpdateOfferDto) {
     return this.appService.updateOffer(payload);
+  }
+
+  @Delete('offer/:offerName')
+  deleteOffer(@Param('offerName') offerName: string) {
+    return this.appService.deleteOffer(offerName);
   }
 
   @Get('offer/:offerName')
