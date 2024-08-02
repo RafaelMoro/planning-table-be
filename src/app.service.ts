@@ -107,14 +107,8 @@ export class AppService {
   async updateOffer(changes: UpdateOfferDto) {
     try {
       const { offerName } = changes;
-      const offersFound = await this.offerModel.find({ offerName }).exec();
-      if (offersFound.length === 0)
-        throw new BadRequestException('Offer not found');
-
-      const [offerFound] = offersFound;
-      const { _id: offerId } = offerFound;
       const updatedOffer = await this.offerModel
-        .findByIdAndUpdate(offerId, { $set: changes }, { new: true })
+        .findOneAndUpdate({ offerName }, { $set: changes }, { new: true })
         .exec();
       const response: GeneralResponse = {
         ...generalResponse,
@@ -152,14 +146,8 @@ export class AppService {
   async updateAnswer(changes: UpdateAnswerDto) {
     try {
       const { answerName } = changes;
-      const answersFound = await this.answerModel.find({ answerName }).exec();
-      if (answersFound.length === 0)
-        throw new BadRequestException('Answer not found');
-
-      const [answerFound] = answersFound;
-      const { _id: answerId } = answerFound;
       const updatedAnswer = await this.answerModel
-        .findByIdAndUpdate(answerId, { $set: changes }, { new: true })
+        .findOneAndUpdate({ answerName }, { $set: changes }, { new: true })
         .exec();
       const response: GeneralResponse = {
         ...generalResponse,
